@@ -8,4 +8,4 @@ services:
     healthCheckPath: /health
     envVars:
       - key: ADMIN_PIN
-        sync: false
+        generateValue: true
