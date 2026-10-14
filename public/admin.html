@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>M# 2026 Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0432">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦋</text></svg>">
+<style>
+@font-face{font-family:OutfitEmbedded;font-weight:800;src:url(/outfit-800.woff2) format('woff2')}
+@font-face{font-family:OutfitEmbedded;font-weight:900;src:url(/outfit-900.woff2) format('woff2')}
+:root{--bg1:#2b1170;--bg2:#0b0432;--ink:#fff;--mute:#D79DFF;--blue:#5170FF;--violet:#8C52FF;--pink:#FF66C4;--ok:#3ddc97;--card:rgba(22,8,79,.72);--line:rgba(215,157,255,.3);--glow:rgba(140,82,255,.5)}
+*{box-sizing:border-box}
+html{background:var(--bg2)}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(circle at 12% 0%,rgba(81,112,255,.28),transparent 45%),radial-gradient(circle at 90% 100%,rgba(255,102,196,.2),transparent 45%),radial-gradient(circle at 50% 30%,var(--bg1),var(--bg2)) fixed;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+.wrap{max-width:620px;margin:0 auto;display:grid;gap:16px}
+header{display:flex;align-items:center;gap:12px}
+header img{height:44px;filter:drop-shadow(0 0 14px var(--glow))}
+header h1{font:900 1.15rem OutfitEmbedded,system-ui;margin:0;letter-spacing:.04em;flex:1}
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:6px 11px;background:var(--card)}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px var(--pink)}
+.pill.on i{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:12px;backdrop-filter:blur(10px)}
+.card h2{margin:0;font:900 1rem OutfitEmbedded,system-ui;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hint{font-size:.8rem;color:var(--mute);margin:0}
+label{display:grid;gap:6px;font-size:.8rem;color:var(--mute)}
+input[type=text],input[type=number],input[type=password],select,textarea{font:inherit;font-size:1rem;color:var(--ink);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:11px 13px;width:100%}
+select option{color:#16084F}
+textarea{resize:vertical;min-height:90px}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+button{font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:12px;padding:12px 16px;color:#fff;background:linear-gradient(100deg,var(--blue),var(--violet) 55%,var(--pink));font-size:.95rem}
+button.ghost{background:rgba(255,255,255,.05);color:var(--ink);border:1px solid var(--line)}
+button.danger{background:transparent;color:var(--pink);border:1px solid rgba(255,102,196,.5)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.btns{display:flex;gap:10px;flex-wrap:wrap}.btns>*{flex:1 1 auto}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:4px;gap:4px}
+.seg button{background:transparent;color:var(--mute);padding:10px}
+.seg button.on{background:linear-gradient(100deg,var(--blue),var(--violet) 55%,var(--pink));color:#fff}
+.now{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+.now .big{font:900 2.4rem/1 OutfitEmbedded,system-ui;letter-spacing:.04em;text-shadow:0 0 .3em var(--glow);grid-row:span 2}
+.now .t{font-weight:700;text-transform:uppercase;font-size:.9rem;letter-spacing:.03em}
+.now .s{font-size:.78rem;color:var(--mute)}
+.preview{border-radius:16px;padding:22px 16px;background:radial-gradient(circle at 50% 40%,var(--bg1),var(--bg2));border:1px dashed var(--line);display:grid;place-items:center}
+.ann{max-width:100%;padding:12px 18px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-transform:uppercase;text-align:center}
+.atag{display:inline-block;margin-bottom:8px;padding:.45em 1.2em .45em 1.4em;border-radius:999px;color:#fff;background:linear-gradient(100deg,var(--blue),var(--violet) 55%,var(--pink));font-size:.62rem;letter-spacing:.24em;font-family:OutfitEmbedded,system-ui;font-weight:800}
+.atxt{font:900 1.1rem/1.2 OutfitEmbedded,system-ui;letter-spacing:.04em;text-wrap:balance;text-shadow:0 0 .6em var(--glow);overflow-wrap:anywhere}
+.meta{font-size:.8rem;color:var(--mute);text-align:center}
+.li{display:flex;gap:10px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.li div{min-width:0}.li b{display:block;font-size:.9rem;text-transform:uppercase;overflow-wrap:anywhere}.li small{color:var(--mute);font-size:.75rem}
+.li button{flex:none;padding:8px 12px;font-size:.8rem}
+.count{font-size:.75rem;color:var(--mute);text-align:right;margin-top:-6px}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:.9rem;color:var(--ink)}
+.switch input{width:22px;height:22px;accent-color:var(--violet)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;transition:.3s;background:#16084F;border:1px solid var(--line);border-radius:999px;padding:11px 18px;font-size:.9rem;z-index:9;box-shadow:0 6px 30px rgba(0,0,0,.4);max-width:calc(100vw - 32px)}
+#toast.show{transform:translate(-50%,0);opacity:1}#toast.err{border-color:var(--pink);color:var(--pink)}
+#login{max-width:380px;margin:12vh auto 0}
+a{color:var(--mute)}
+</style>
+</head>
+<body>
+<form id="login" class="card" hidden>
+ <img src="/logo.png" alt="M# 2026 logo" style="width:60%;margin:0 auto;filter:drop-shadow(0 0 24px var(--glow))">
+ <h2>Admin sign in</h2>
+ <label>Admin PIN<input type="password" id="pin" autocomplete="current-password" required></label>
+ <p class="hint" id="lerr" style="color:var(--pink)"></p>
+ <button type="submit">Unlock controls</button>
+</form>
+
+<main class="wrap" id="app" hidden>
+ <header><img src="/logo.png" alt=""><h1>Display control</h1><span class="pill" id="net"><i></i><span id="nett">Connecting</span></span></header>
+
+ <section class="card" aria-label="On screen now">
+  <h2>On screen now <a href="/" target="_blank" class="hint">Open display ↗</a></h2>
+  <div class="now"><div class="big" id="nowTime">--:--</div><div class="t" id="nowTitle">—</div><div class="s" id="nowSub"></div></div>
+ </section>
+
+ <section class="card" aria-label="Announcements">
+  <h2>New announcement</h2>
+  <div id="compose" style="display:grid;gap:12px">
+   <label>Message<textarea id="atext" maxlength="160" placeholder="Type the announcement to show on the big screen"></textarea></label>
+   <div class="count" id="acount">0 / 160</div>
+   <label>Show for<select id="adur"><option value="5">5 minutes</option><option value="15" selected>15 minutes</option><option value="30">30 minutes</option><option value="60">1 hour</option><option value="120">2 hours</option><option value="0">Until removed</option></select></label>
+   <button id="review" type="button" disabled>Review announcement</button>
+  </div>
+  <div id="rev" hidden style="display:grid;gap:12px">
+   <p class="hint">This is how it will appear on the display. Check it, then submit.</p>
+   <div class="preview"><div class="ann"><span class="atag">Announcement</span><div class="atxt" id="ptxt"></div></div></div>
+   <div class="meta" id="pmeta"></div>
+   <div class="btns"><button class="ghost" id="edit" type="button">Edit</button><button id="submit" type="button">Submit announcement</button></div>
+  </div>
+ </section>
+
+ <section class="card" aria-label="Active announcements">
+  <h2>Active announcements <span class="hint" id="acnt"></span></h2>
+  <div id="alist" style="display:grid;gap:8px"></div>
+  <p class="hint" id="aempty">Nothing on screen right now.</p>
+  <button class="danger" id="aclr" type="button" hidden>Clear all</button>
+ </section>
+
+ <section class="card" aria-label="Timer">
+  <h2>Timer</h2>
+  <div class="seg"><button type="button" id="mAuto">Live schedule</button><button type="button" id="mMan">Custom timer</button></div>
+  <div id="autoBox" style="display:grid;gap:12px">
+   <p class="hint">Counts down each slot of the event schedule automatically (IST).</p>
+   <label>Headline override (optional)<input type="text" id="headline" maxlength="80" placeholder="Leave blank to use the schedule title"></label>
+   <label class="switch">Show “Up next” bar<input type="checkbox" id="footer"></label>
+   <button class="ghost" id="saveAuto" type="button">Apply to display</button>
+  </div>
+  <div id="manBox" style="display:grid;gap:12px">
+   <label>Display text<input type="text" id="mtitle" maxlength="80" value="The butterfly effect begins in"></label>
+   <div class="row">
+    <label>Hours<input type="number" id="mh" min="0" max="99" value="0" inputmode="numeric"></label>
+    <label>Minutes<input type="number" id="mm" min="0" max="59" value="30" inputmode="numeric"></label>
+   </div>
+   <div class="btns"><button id="mstart" type="button">Start timer</button><button class="ghost" id="mtitleBtn" type="button">Update text only</button></div>
+   <div id="runCtl" style="display:grid;gap:10px">
+    <div class="btns"><button class="ghost" id="mpause" type="button">Pause</button><button class="ghost" id="mreset" type="button">Restart</button></div>
+    <div class="row3"><button class="ghost" data-adj="-5" type="button">−5m</button><button class="ghost" data-adj="-1" type="button">−1m</button><button class="ghost" data-adj="1" type="button">+1m</button><button class="ghost" data-adj="5" type="button">+5m</button></div>
+   </div>
+  </div>
+ </section>
+
+ <section class="card" aria-label="Display settings">
+  <h2>Display settings</h2>
+  <label>Theme<select id="theme"><option value="dark">Deep indigo</option><option value="light">Lavender</option></select></label>
+  <label>Seconds per announcement (when several are active)<input type="number" id="rotate" min="3" max="60" inputmode="numeric"></label>
+  <button class="ghost" id="saveSet" type="button">Apply settings</button>
+ </section>
+
+ <p class="hint" style="text-align:center"><a href="#" id="logout">Sign out</a></p>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const IST=19800000;
+let PIN='';try{PIN=localStorage.getItem('m26-admin-pin')||''}catch{}
+let S=null,skew=0,ES;
+const nowMs=()=>Date.now()+skew;
+const hm=x=>{const d=new Date(x+IST);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0')};
+
+function toast(t,err){const e=$('#toast');e.textContent=t;e.classList.toggle('err',!!err);e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),2600)}
+
+async function post(path,data){
+ const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','x-admin-pin':PIN},body:JSON.stringify(data||{})});
+ const j=await r.json().catch(()=>({}));
+ if(r.status===401){logout('PIN rejected. Sign in again.');throw new Error('Wrong PIN')}
+ if(!r.ok)throw new Error(j.error||'Request failed');
+ return j}
+async function act(data,ok){
+ try{const j=await post('/api/action',data);render(j.state);if(ok)toast(ok)}catch(e){toast(e.message,true)}}
+
+// ---- Sign in ----
+function logout(msg){PIN='';try{localStorage.removeItem('m26-admin-pin')}catch{};$('#app').hidden=true;$('#login').hidden=false;$('#lerr').textContent=msg||'';$('#pin').focus()}
+$('#login').onsubmit=async e=>{e.preventDefault();PIN=$('#pin').value.trim();
+ const r=await fetch('/api/login',{method:'POST',headers:{'x-admin-pin':PIN}}).catch(()=>null);
+ if(r&&r.ok){try{localStorage.setItem('m26-admin-pin',PIN)}catch{};boot()}
+ else{const j=r?await r.json().catch(()=>({})):{};$('#lerr').textContent=j.error||'Could not reach the server'}};
+$('#logout').onclick=e=>{e.preventDefault();logout()};
+
+// ---- Live state ----
+function connect(){
+ try{ES&&ES.close()}catch{}
+ ES=new EventSource('/events');
+ ES.onopen=()=>net(true);
+ ES.onmessage=e=>{net(true);const d=JSON.parse(e.data);skew=d.now-Date.now();render(d.state)};
+ ES.onerror=()=>net(false)}
+function net(on){$('#net').classList.toggle('on',on);$('#nett').textContent=on?'Live':'Offline'}
+
+let formFilled=false;
+function render(s){S=s;const T=s.timer;const man=T.mode==='manual';
+ $('#mAuto').classList.toggle('on',!man);$('#mMan').classList.toggle('on',man);
+ $('#autoBox').hidden=man;$('#manBox').hidden=!man&&!$('#manBox').dataset.open;
+ $('#runCtl').hidden=!man;$('#mtitleBtn').hidden=!man;$('#mstart').textContent=man?'Start new timer':'Start timer';
+ $('#mpause').textContent=T.paused?'Resume':'Pause';
+ if(!formFilled){formFilled=true;$('#headline').value=s.headline||'';$('#footer').checked=s.footer!==false;$('#theme').value=s.theme;$('#rotate').value=s.rotate;if(man&&T.title)$('#mtitle').value=T.title}
+ const list=(s.ann||[]).filter(a=>!a.until||a.until>nowMs()),box=$('#alist');box.innerHTML='';
+ for(const a of list){const r=document.createElement('div'),d=document.createElement('div'),b=document.createElement('b'),sm=document.createElement('small'),x=document.createElement('button');
+  r.className='li';b.textContent=a.text;sm.textContent=a.until?'Until '+hm(a.until)+' IST':'Until removed';
+  x.className='danger';x.type='button';x.textContent='Remove';x.onclick=()=>act({type:'ann.remove',id:a.id},'Removed from display');
+  d.append(b,sm);r.append(d,x);box.appendChild(r)}
+ $('#aempty').hidden=!!list.length;$('#aclr').hidden=list.length<2;$('#acnt').textContent=list.length?list.length+' live':'';
+ tick()}
+
+// Mirror of the display's schedule logic for the "On screen now" summary
+const BASE=Date.UTC(2026,9,14)-IST;
+const SCH=[[0,'08:00','Registration and Welcome Address'],[0,'09:00','Overview of Rules and Guidelines'],[0,'09:30','Inauguration Ceremony'],[0,'10:00','Coding Slot 0'],[0,'13:00','Lunch'],[0,'14:00','Coding Slot 1 / Mentoring Round'],[0,'18:00','Snack Break'],[0,'18:30','Coding Slot 2'],[0,'20:30','Dinner'],[0,'21:30','Coding Slot 3'],
+[1,'08:00','Breakfast'],[1,'08:30','Judging Round 1'],[1,'11:00','Coding Slot 4 / Deployment Check'],[1,'13:00','Lunch'],[1,'14:00','Coding Slot 5 / Mentoring Round'],[1,'18:00','Snack Break'],[1,'18:30','Judging Round 2'],[1,'20:30','Dinner'],[1,'21:30','Coding Slot 6 / Deployment Check'],
+[2,'00:00','Bug Bounty Round (Attack Phase)'],[2,'02:00','Bug Fixing Round (Defense Phase)'],[2,'03:30','Coding Slot 7'],[2,'08:00','Breakfast'],[2,'08:30','Judge Round 3 & Bug Bounty Evaluation'],[2,'10:00','Judges Discussion & Evaluation for Shortlisting Top Teams'],[2,'10:30','Final Presentation (Top Teams)'],[2,'13:00','Lunch'],[2,'15:00','Valedictory Ceremony']];
+const at=(d,t)=>{const[h,m]=t.split(':');return BASE+d*864e5+h*36e5+m*6e4};
+const SEG=SCH.map((s,i)=>({a:at(s[0],s[1]),b:at(...(SCH[i+1]||[2,'16:00'])),t:s[2],n:SCH[i+1]&&SCH[i+1][2]}));
+function tick(){if(!S)return;const T=S.timer,w=nowMs();let rem,title,sub;
+ if(T.mode==='manual'){rem=Math.max(0,T.paused?T.rem:T.endAt-w);title=T.title||'(no text)';sub='Custom timer'+(T.paused?' · paused':rem?'':' · finished')}
+ else{const s=w<SEG[0].a?{t:'The Butterfly Effect begins soon',b:SEG[0].a}:SEG.find(x=>w<x.b);
+  if(!s){rem=0;title='Thank you for being part of M# 2026';sub='Schedule finished'}
+  else{rem=s.b-w;title=S.headline||s.t;sub='Live schedule'+(s.n?' · next: '+s.n+' at '+hm(s.b):'')}}
+ const m=Math.ceil(rem/6e4);$('#nowTime').textContent=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+ $('#nowTitle').textContent=title;$('#nowSub').textContent=sub}
+setInterval(tick,1000);
+
+// ---- Announcement: write → review → submit ----
+const at_=$('#atext');
+at_.oninput=()=>{$('#acount').textContent=at_.value.length+' / 160';$('#review').disabled=!at_.value.trim()};
+$('#review').onclick=()=>{const t=at_.value.replace(/\s+/g,' ').trim();if(!t)return;
+ $('#ptxt').textContent=t;const d=$('#adur');$('#pmeta').textContent='Shows '+(d.value==='0'?'until removed':'for '+d.options[d.selectedIndex].text)+' · goes live immediately on submit';
+ $('#compose').hidden=true;$('#rev').hidden=false;$('#submit').focus()};
+$('#edit').onclick=()=>{$('#rev').hidden=true;$('#compose').hidden=false;at_.focus()};
+$('#submit').onclick=async()=>{const b=$('#submit');b.disabled=true;
+ await act({type:'ann.add',text:at_.value,minutes:+$('#adur').value},'Announcement is live on the display');
+ b.disabled=false;at_.value='';at_.oninput();$('#rev').hidden=true;$('#compose').hidden=false};
+$('#aclr').onclick=()=>{if(confirm('Remove every announcement from the display?'))act({type:'ann.clear'},'All announcements cleared')};
+
+// ---- Timer ----
+$('#mAuto').onclick=()=>{delete $('#manBox').dataset.open;if(S.timer.mode==='manual'){if(confirm('Stop the custom timer and return to the live schedule?'))act({type:'timer.auto'},'Back to live schedule')}else render(S)};
+$('#mMan').onclick=()=>{$('#manBox').dataset.open=1;$('#autoBox').hidden=true;$('#manBox').hidden=false;$('#mAuto').classList.remove('on');$('#mMan').classList.add('on');$('#mh').focus()};
+$('#mstart').onclick=()=>{const h=+$('#mh').value||0,m=+$('#mm').value||0;
+ if(h<0||m<0||m>59||h>99||h+m===0)return toast('Enter hours 0–99 and minutes 0–59',true);
+ act({type:'timer.start',hours:h,minutes:m,title:$('#mtitle').value},'Timer started')};
+$('#mtitleBtn').onclick=()=>act({type:'timer.title',title:$('#mtitle').value},'Text updated');
+$('#mpause').onclick=()=>act({type:S.timer.paused?'timer.resume':'timer.pause'},S.timer.paused?'Resumed':'Paused');
+$('#mreset').onclick=()=>act({type:'timer.reset'},'Timer restarted');
+document.querySelectorAll('[data-adj]').forEach(b=>b.onclick=()=>act({type:'timer.adjust',minutes:+b.dataset.adj},(b.dataset.adj>0?'Added ':'Removed ')+Math.abs(b.dataset.adj)+' min'));
+$('#saveAuto').onclick=()=>act({type:'settings',headline:$('#headline').value,footer:$('#footer').checked},'Display updated');
+$('#saveSet').onclick=()=>act({type:'settings',theme:$('#theme').value,rotate:+$('#rotate').value||9},'Settings applied');
+$('#theme').onchange=$('#saveSet').onclick;
+
+function boot(){$('#login').hidden=true;$('#app').hidden=false;connect()}
+PIN?boot():logout();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "m26-countdown",
+  "version": "1.0.0",
+  "private": true,
+  "description": "M# 2026 live countdown display with remote admin control",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
